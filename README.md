@@ -1,1 +1,1 @@
-testing glfw, glm and cmake
+testing glfw, glm and cmake.
