@@ -41,7 +41,10 @@ int main() {
 		glViewport(0, 0, width, height);
 
 		glfwSwapBuffers(window);
+		glfwWaitEvents();
 	}
 
-	return 0;
+	glfwDestroyWindow(window);
+	glfwTerminate();
+	exit(EXIT_SUCCESS);
 }

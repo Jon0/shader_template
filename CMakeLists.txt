@@ -17,5 +17,13 @@ include_directories ( ${GLFW_INCLUDE_DIRS} )
 include_directories ("${PROJECT_SOURCE_DIR}/library")
 include_directories ("${PROJECT_SOURCE_DIR}/library/glfw-3.0.3/include")
 
-add_executable (Test src/test.cpp src/shader/program.cpp src/shader/Shader.cpp)
+
+file(GLOB SRC_FILES
+    "src/*.h"
+    "src/*.cpp"
+    "src/shader/*.h"
+    "src/shader/*.cpp"
+)
+
+add_executable (Test ${SRC_FILES})
 target_link_libraries (Test glfw ${GLFW_LIBRARIES})
