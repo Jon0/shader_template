@@ -44,7 +44,7 @@ all: shader_test
 shader_test: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	g++  -o "shader_test" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L/am/phoenix/home1/remnanjona/lib/lib -o "shader_test" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
