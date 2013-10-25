@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 
 project (Test)
-set (Test_VERSION_MAJOR 2)
+set (Test_VERSION_MAJOR 1)
 set (Test_VERSION_MINOR 0)
 
 configure_file (

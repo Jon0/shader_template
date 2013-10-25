@@ -5,14 +5,11 @@
  *      Author: remnanjona
  */
 
-#include <iostream>
-
 #include "Shader.h"
 
 namespace std {
 
 Shader::Shader() {
-	cout << "shader begin..." << endl;
 
 }
 
