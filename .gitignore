@@ -1,0 +1,9 @@
+*.o
+*.d
+.#*
+*~
+.nfs*
+#*#
+*run
+Debug/animation
+Release/animation
