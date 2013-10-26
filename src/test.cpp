@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "shader/Shader.h"
@@ -11,18 +12,23 @@
 
 using namespace std;
 
-void error_callback(int error, const char* description)
-{
+void error_callback(int error, const char* description) {
     fputs(description, stderr);
 }
 
-int main() {
-	cout << "hello version: " << Test_VERSION_MAJOR << "." << Test_VERSION_MINOR << endl;
-	cout << sqrt(9) << endl;
-
+void printVersion() {
+	cout << "shader_test version: " << Test_VERSION_MAJOR << "." << Test_VERSION_MINOR << endl;
 	print();
+}
+
+int main() {
+	printVersion();
 
 	Shader s;
+
+
+	GLuint program = glCreateProgram();
+	//glDispatchCompute(0,0,0);
 
 
 	if (!glfwInit()) exit(EXIT_FAILURE);
