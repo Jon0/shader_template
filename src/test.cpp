@@ -22,21 +22,21 @@ void printVersion() {
 }
 
 int main() {
-	printVersion();
-
-	Shader s;
-
-
-	GLuint program = glCreateProgram();
-	//glDispatchCompute(0,0,0);
-
-
 	if (!glfwInit()) exit(EXIT_FAILURE);
 
 	glfwSetErrorCallback(error_callback);
 
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Window", NULL, NULL);
 	glfwMakeContextCurrent(window);
+
+	// Initialize GLEW
+    if (glewInit() != GLEW_OK) {
+        fprintf(stderr, "Failed to initialize GLEW\n");
+        return -1;
+    }
+
+    // Init
+    Shader s;
 
 	while (!glfwWindowShouldClose(window))
 	{

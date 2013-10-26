@@ -11,6 +11,9 @@ namespace std {
 
 Shader::Shader() {
 
+	GLuint program = glCreateProgram();
+	//glDispatchCompute(0,0,0);
+
 }
 
 Shader::~Shader() {
