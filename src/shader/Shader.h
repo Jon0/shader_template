@@ -1,18 +1,23 @@
 /*
  * Shader.h
  *
- *  Created on: 25/10/2013
+ *  Created on: 20/09/2013
  *      Author: remnanjona
  */
 
 #ifndef SHADER_H_
 #define SHADER_H_
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 namespace std {
 
 class Shader {
 public:
+	GLuint ShaderHandle;
 	Shader();
+	Shader(string, GLenum);
 	virtual ~Shader();
 };
 

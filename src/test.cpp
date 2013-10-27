@@ -6,19 +6,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
-#include "shader/program.h"
 #include "config.h"
 
 using namespace std;
 
 void error_callback(int error, const char* description) {
-    fputs(description, stderr);
+	cerr << description << endl;
 }
 
 void printVersion() {
 	cout << "shader_test version: " << Test_VERSION_MAJOR << "." << Test_VERSION_MINOR << endl;
-	print();
 }
 
 int main() {
@@ -31,12 +30,13 @@ int main() {
 
 	// Initialize GLEW
     if (glewInit() != GLEW_OK) {
-        fprintf(stderr, "Failed to initialize GLEW\n");
-        return -1;
+    	cerr << "Failed to initialize GLEW" << endl;
+        exit(EXIT_FAILURE);
     }
 
-    // Init
-    Shader s;
+    // Init pipeline
+    Pipeline pipeline;
+    Shader shader("glsl/test.vert", GL_VERTEX_SHADER);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -45,6 +45,8 @@ int main() {
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
+
+		glBindProgramPipeline(pipeline.name);
 
 		glfwSwapBuffers(window);
 		glfwWaitEvents();
