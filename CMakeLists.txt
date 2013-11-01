@@ -31,10 +31,14 @@ add_library( glew STATIC
 
 file(GLOB SRC_FILES
     "src/*.cpp"
+    "src/components/*.cpp"
     "src/shader/*.cpp"
     "src/pipeline/*.cpp"
     "src/buffer/*.cpp"
 )
+
+# copy shaders to binary folder
+file( COPY "${PROJECT_SOURCE_DIR}/glsl/" DESTINATION "${PROJECT_BINARY_DIR}/glsl/")
 
 add_definitions(-std=c++11)
 add_executable (Test ${SRC_FILES})

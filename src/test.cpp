@@ -20,7 +20,7 @@ void printVersion() {
 	cout << "shader_test version: " << Test_VERSION_MAJOR << "." << Test_VERSION_MINOR << endl;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 	if (!glfwInit()) exit(EXIT_FAILURE);
 
 	glfwSetErrorCallback(error_callback);
@@ -38,14 +38,15 @@ int main() {
     Pipeline pipeline;
     Shader shader("glsl/test.vert", GL_VERTEX_SHADER);
 
+    pipeline.addStage(shader);
+
+    int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
+
 	while (!glfwWindowShouldClose(window))
 	{
 	    // Keep running
-
-		int width, height;
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
-
 		glBindProgramPipeline(pipeline.name);
 
 		glfwSwapBuffers(window);

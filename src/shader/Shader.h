@@ -8,6 +8,8 @@
 #ifndef SHADER_H_
 #define SHADER_H_
 
+#include <string>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -16,7 +18,8 @@ namespace std {
 class Shader {
 public:
 	GLuint ShaderHandle;
-	Shader();
+	GLenum type;
+
 	Shader(string, GLenum);
 	virtual ~Shader();
 };
