@@ -12,6 +12,7 @@ configure_file (
 set(GLEW_SOURCE "${PROJECT_SOURCE_DIR}/library/glew-1.10.0/src/glew.c")
 add_subdirectory (library/glfw-3.0.3)
 add_subdirectory (library/glm)
+add_subdirectory (library/assimp--3.0.1270)
 
 include_directories ("${PROJECT_BINARY_DIR}")
 
@@ -22,6 +23,7 @@ include_directories ( ${GLM_INCLUDE_DIR} )
 include_directories ("${PROJECT_SOURCE_DIR}/library")
 include_directories ("${PROJECT_SOURCE_DIR}/library/glew-1.10.0/include")
 include_directories ("${PROJECT_SOURCE_DIR}/library/glfw-3.0.3/include")
+include_directories ("${PROJECT_SOURCE_DIR}/library/assimp--3.0.1270/include")
 
 add_library( glew STATIC
 	${GLEW_SOURCE}
@@ -36,4 +38,4 @@ file(GLOB SRC_FILES
 
 add_definitions(-std=c++11)
 add_executable (Test ${SRC_FILES})
-target_link_libraries (Test glew glfw ${GLFW_LIBRARIES})
+target_link_libraries (Test glew glfw assimp ${GLFW_LIBRARIES})
