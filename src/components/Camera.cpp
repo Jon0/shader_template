@@ -24,7 +24,7 @@ Camera::Camera():
 		camera_properties { GL_SHADER_STORAGE_BUFFER }
 {
 	cam_aspect = 1.0;
-	viewzoom = 1.0;
+	viewzoom = 10.0;
 
 	// mouse action settings
 	arcball_x = arcball_y = 0.0;
@@ -45,8 +45,10 @@ void Camera::update( float tick ) {
 	glm::vec3 eye(x, y, z - viewzoom);
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-	camera_properties.data->P = glm::mat4(1.0); //glm::perspective(60.0f, cam_aspect, 1.0f, 100.0f);
-	camera_properties.data->V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
+
+	camera_properties.data->P = glm::scale(glm::mat4(1.0), glm::vec3(0.1f, 0.1f, 0.1f)); //glm::perspective(60.0f, cam_aspect, 0.01f, 1000.0f);
+	//camera_properties.data->V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
+	camera_properties.data->V = glm::lookAt(focus, eye, up);
 	camera_properties.data->M = glm::mat4(1.0);
 	camera_properties.update();
 }

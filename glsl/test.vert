@@ -17,5 +17,5 @@ out gl_PerVertex {
 void main(){
 
 	// cam.M * cam.V * cam.P *
-	gl_Position = P * vertexPosition_modelspace;
+	gl_Position = V * P * vertexPosition_modelspace;
 }

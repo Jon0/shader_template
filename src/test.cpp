@@ -65,18 +65,21 @@ int main(int argc, char *argv[]) {
     // Test Vertex Data
     vector<silly_vect> verts;
     silly_vect a;
-    a.pos.x = -0.50;
-    a.pos.y = 0.50;
+    a.pos.x = -0.80;
+    a.pos.y = 0.80;
+    a.pos.z = 0;
     a.pos.w = 1.0;
 
     silly_vect b;
     b.pos.x = 0.50;
     b.pos.y = -0.50;
+    b.pos.z = 0;
     b.pos.w = 1.0;
 
     silly_vect c;
     c.pos.x = -0.50;
     c.pos.y = -0.50;
+    c.pos.z = 0;
     c.pos.w = 1.0;
 
     verts.push_back(a);
@@ -119,7 +122,7 @@ int main(int argc, char *argv[]) {
 		 */
 		glBindBuffer( GL_ARRAY_BUFFER, buff.location );
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (void *)(0*4));
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0*4));
 
 	    /*
 	     * attach pipeline
