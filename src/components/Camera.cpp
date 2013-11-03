@@ -17,14 +17,14 @@ namespace std {
 
 Camera::Camera():
 		focus {0, 0, 0},
-		cam_angle {0.644164, 0.194619, 0.718575, 0.175646},
+		cam_angle {1, 0, 0, 0},
 		cam_angle_d {1, 0, 0, 0},
 		click_old {1, 0, 0, 0},
 		click_new {1, 0, 0, 0},
 		camera_properties { GL_SHADER_STORAGE_BUFFER }
 {
 	cam_aspect = 1.0;
-	viewzoom = 10.0;
+	viewzoom = -0.0;
 
 	// mouse action settings
 	arcball_x = arcball_y = 0.0;
@@ -46,10 +46,10 @@ void Camera::update( float tick ) {
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
 
 
-	camera_properties.data->P = glm::scale(glm::mat4(1.0), glm::vec3(0.1f, 0.1f, 0.1f)); //glm::perspective(60.0f, cam_aspect, 0.01f, 1000.0f);
-	//camera_properties.data->V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
-	camera_properties.data->V = glm::lookAt(focus, eye, up);
-	camera_properties.data->M = glm::mat4(1.0);
+	camera_properties.data->P = glm::perspective(45.0f, cam_aspect, 0.1f, 1000.0f);
+	//camera_properties.data->V = glm::lookAt(eye, focus, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
+	camera_properties.data->V = glm::mat4_cast(cam_angle) * glm::mat4(1.0f); //glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
+	camera_properties.data->M = glm::mat4(1.0f);
 	camera_properties.update();
 }
 

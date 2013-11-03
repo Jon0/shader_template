@@ -56,30 +56,24 @@ int main(int argc, char *argv[]) {
     pipeline.addStage(vert, GL_VERTEX_SHADER_BIT);
     pipeline.addStage(frag, GL_FRAGMENT_SHADER_BIT);
 
-    //GLuint programID = glCreateProgram();
-    //glAttachShader(programID, vert.ShaderHandle);
-    //glAttachShader(programID, frag.ShaderHandle);
-    //glBindAttribLocation(programID, 0, "vertexPosition_modelspace");
-    //glLinkProgram(programID);
-
     // Test Vertex Data
     vector<silly_vect> verts;
     silly_vect a;
-    a.pos.x = -0.80;
-    a.pos.y = 0.80;
-    a.pos.z = 0;
+    a.pos.x = -80;
+    a.pos.y = 80;
+    a.pos.z = -300;
     a.pos.w = 1.0;
 
     silly_vect b;
-    b.pos.x = 0.50;
-    b.pos.y = -0.50;
-    b.pos.z = 0;
+    b.pos.x = 50;
+    b.pos.y = -50;
+    b.pos.z = -300;
     b.pos.w = 1.0;
 
     silly_vect c;
-    c.pos.x = -0.50;
-    c.pos.y = -0.50;
-    c.pos.z = 0;
+    c.pos.x = -50;
+    c.pos.y = -50;
+    c.pos.z = -300;
     c.pos.w = 1.0;
 
     verts.push_back(a);
@@ -95,7 +89,16 @@ int main(int argc, char *argv[]) {
     camera.resize(800, 600);
     camera.properties()->bind(1);
 
+    /*
+     * gl error check
+     */
     if (int error = glGetError()) cout << "error = " << error << endl;
+
+    /*
+     * start loop
+     */
+    bool mDown = false;
+    double mousex, mousey;
 	while (!glfwWindowShouldClose(window))
 	{
 	    int width, height;
@@ -105,10 +108,19 @@ int main(int argc, char *argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
-			double mousex, mousey;
 			glfwGetCursorPos(window, &mousex, &mousey);
 
-			cout << mousex << ", " << mousey << endl;
+			if (!mDown) {
+				camera.mouseClicked(0, 0, mousex, height-mousey);
+			}
+			else {
+				camera.mouseDragged(mousex, height-mousey);
+			}
+			mDown = true;
+		}
+		else if (mDown) {
+			camera.mouseClicked(0, 1, mousex, height-mousey);
+			mDown = false;
 		}
 
 		/*
@@ -128,8 +140,6 @@ int main(int argc, char *argv[]) {
 	     * attach pipeline
 	     */
 		glBindProgramPipeline(pipeline.name);
-	    //glUseProgram(programID);
-
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glFlush();
