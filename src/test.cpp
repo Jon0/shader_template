@@ -59,21 +59,21 @@ int main(int argc, char *argv[]) {
     // Test Vertex Data
     vector<silly_vect> verts;
     silly_vect a;
-    a.pos.x = -80;
-    a.pos.y = 80;
-    a.pos.z = -300;
+    a.pos.x = -8;
+    a.pos.y = 8;
+    a.pos.z = -30;
     a.pos.w = 1.0;
 
     silly_vect b;
     b.pos.x = 50;
     b.pos.y = -50;
-    b.pos.z = -300;
+    b.pos.z = -30;
     b.pos.w = 1.0;
 
     silly_vect c;
-    c.pos.x = -50;
-    c.pos.y = -50;
-    c.pos.z = -300;
+    c.pos.x = -5;
+    c.pos.y = -5;
+    c.pos.z = -30;
     c.pos.w = 1.0;
 
     verts.push_back(a);
