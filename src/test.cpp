@@ -61,19 +61,19 @@ int main(int argc, char *argv[]) {
     silly_vect a;
     a.pos.x = -8;
     a.pos.y = 8;
-    a.pos.z = -30;
+    a.pos.z = -8;
     a.pos.w = 1.0;
 
     silly_vect b;
-    b.pos.x = 50;
-    b.pos.y = -50;
-    b.pos.z = -30;
+    b.pos.x = 5;
+    b.pos.y = -5;
+    b.pos.z = -8;
     b.pos.w = 1.0;
 
     silly_vect c;
     c.pos.x = -5;
     c.pos.y = -5;
-    c.pos.z = -30;
+    c.pos.z = -8;
     c.pos.w = 1.0;
 
     verts.push_back(a);
