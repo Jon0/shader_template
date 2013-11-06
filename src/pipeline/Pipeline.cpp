@@ -5,6 +5,8 @@
  *      Author: remnanjona
  */
 
+#include <iostream>
+
 #include "Pipeline.h"
 
 namespace std {
@@ -27,6 +29,23 @@ void Pipeline::addStage(Shader &s) {
 	glAttachShader( program, s.ShaderHandle );
 	glProgramParameteri( program, GL_PROGRAM_SEPARABLE, GL_TRUE );
 	glLinkProgram( program );
+
+	/*
+	 * list available shader storage blocks
+	 */
+	int num_blocks;
+	glGetProgramInterfaceiv(program, GL_SHADER_STORAGE_BLOCK, GL_ACTIVE_RESOURCES, &num_blocks);
+
+	int len;
+	char attname [32];
+	for (int i = 0; i < num_blocks; ++i) {
+		glGetProgramResourceName(program, GL_SHADER_STORAGE_BLOCK, i, 32, &len, attname );
+		cout << attname << ", " << len << endl;
+
+		GLuint block_index = glGetProgramResourceIndex( program, GL_SHADER_STORAGE_BLOCK, attname );
+
+		glShaderStorageBlockBinding( program, block_index, 1 ); // bind to 1.
+	}
 
 	/*
 	 * check errors

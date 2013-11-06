@@ -31,10 +31,10 @@ add_library( glew STATIC
 
 file(GLOB SRC_FILES
     "src/*.cpp"
+    "src/buffer/*.cpp"
     "src/components/*.cpp"
     "src/shader/*.cpp"
     "src/pipeline/*.cpp"
-    "src/buffer/*.cpp"
 )
 
 # copy shaders to binary folder
