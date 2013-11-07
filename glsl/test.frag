@@ -6,8 +6,9 @@ layout(std430, binding = 1) buffer Camera {
 	mat4 M;
 };
 
+in vec4 color_vert;
 out vec4 color;
 
 void main(){
-	color = vec4(1.0);
+	color = color_vert;
 }
