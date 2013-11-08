@@ -6,7 +6,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "components/BufferSet.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
 #include "config.h"
@@ -38,11 +37,7 @@ int main(int argc, char *argv[]) {
     // Init pipeline
     Pipeline pipeline;
     Shader shader("glsl/test.vert", GL_VERTEX_SHADER);
-
     pipeline.addStage(shader);
-
-    BufferSet obj;
-
 
     int width, height;
 	glfwGetFramebufferSize(window, &width, &height);

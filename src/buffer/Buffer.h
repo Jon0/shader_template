@@ -31,6 +31,16 @@ public:
 	virtual ~Buffer() {
 		glDeleteBuffers(1, &location);
 	}
+
+	void update() {
+		glBindBuffer(type, location);
+		glBufferData(type, sizeof(T), &data, GL_DYNAMIC_DRAW);
+		glBindBuffer(type, 0);
+	}
+
+	void bind(GLuint bindingPoint) {
+		glBindBufferBase(type, bindingPoint, location); //bindBufferRange...
+	}
 };
 
 } /* namespace std */

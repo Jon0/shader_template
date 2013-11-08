@@ -12,8 +12,7 @@ namespace std {
 
 class Component {
 public:
-	Component();
-	virtual ~Component();
+	virtual ~Component() {}
 };
 
 } /* namespace std */
