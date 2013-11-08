@@ -20,7 +20,8 @@ Camera::Camera():
 		cam_angle {0.644164, 0.194619, 0.718575, 0.175646},
 		cam_angle_d {1, 0, 0, 0},
 		click_old {1, 0, 0, 0},
-		click_new {1, 0, 0, 0}
+		click_new {1, 0, 0, 0},
+		camera_properties { GL_SHADER_STORAGE_BLOCK }
 {
 	cam_aspect = 1.0;
 	viewzoom = 697.38;
@@ -41,9 +42,11 @@ void Camera::update( float tick ) {
 	cam_angle_d = glm::slerp( glm::quat(), cam_angle_d, ( 1 - tick * 10 ) );
 
 	float x = focus.x, y = focus.y, z = focus.z;
+	glm::vec3 eye(x, y, z - viewzoom);
+	glm::vec3 up(0.0f, 1.0f, 0.0f);
 
 	camera_properties.data.P = glm::perspective(60.0f, cam_aspect, 1.0f, 5000.0f);
-	camera_properties.data.V = glm::lookAt(x, y, z, x, y, z - viewzoom, 0.0f, 1.0f, 0.0f) * glm::mat4_cast(cam_angle) * glm::translate(0.0f, 0.0f, -viewzoom);
+	camera_properties.data.V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
 	camera_properties.data.M = glm::mat4(1.0);
 	camera_properties.update();
 }

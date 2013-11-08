@@ -45,6 +45,13 @@ int main(int argc, char *argv[]) {
 
 	while (!glfwWindowShouldClose(window))
 	{
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
+			double mousex, mousey;
+			glfwGetCursorPos(window, &mousex, &mousey);
+
+			cout << mousex << ", " << mousey << endl;
+		}
+
 	    // Keep running
 		glBindProgramPipeline(pipeline.name);
 
