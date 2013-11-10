@@ -17,8 +17,6 @@ out gl_PerVertex {
 out vec4 color_vert;
 
 void main(){
-
-	// cam.M * cam.V * cam.P *
 	gl_Position = P * V * vertexPosition_modelspace;
 
 	color_vert = gl_VertexID * vec4(0.3);
