@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 		 * draw voxels
 		 */
 		glBindProgramPipeline(pipeline.name);
-		glDrawArrays(GL_POINTS, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glFlush();
 		glfwSwapBuffers(window);
