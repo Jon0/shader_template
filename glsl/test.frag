@@ -1,11 +1,13 @@
 #version 430
 
-layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(std430, binding = 1) buffer Camera {
+	mat4 P;
+	mat4 V;
+	mat4 M;
+};
 
-uniform mat4 P;
-uniform mat4 V;
-uniform mat4 M;
+out vec4 color;
 
 void main(){
-	gl_Position =  M * V * P * vec4( vertexPosition_modelspace, 1 );
+	color = vec4(1.0);
 }

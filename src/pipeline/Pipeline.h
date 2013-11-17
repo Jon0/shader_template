@@ -25,7 +25,7 @@ public:
 	Pipeline();
 	virtual ~Pipeline();
 
-	void addStage(Shader &);
+	void addStage(Shader &, GLbitfield);
 };
 
 } /* namespace std */

@@ -20,7 +20,7 @@ Pipeline::~Pipeline() {
 	glDeleteProgramPipelines(1, &name);
 }
 
-void Pipeline::addStage(Shader &s) {
+void Pipeline::addStage(Shader &s, GLbitfield stages) {
 
 	/*
 	 * create a program stage
@@ -40,7 +40,7 @@ void Pipeline::addStage(Shader &s) {
 	char attname [32];
 	for (int i = 0; i < num_blocks; ++i) {
 		glGetProgramResourceName(program, GL_SHADER_STORAGE_BLOCK, i, 32, &len, attname );
-		cout << attname << ", " << len << endl;
+		cout << "attribute: " << attname << endl;
 
 		GLuint block_index = glGetProgramResourceIndex( program, GL_SHADER_STORAGE_BLOCK, attname );
 
@@ -65,7 +65,7 @@ void Pipeline::addStage(Shader &s) {
 	 * add stage to pipeline
 	 */
 	glBindProgramPipeline(name);
-	glUseProgramStages( name, GL_VERTEX_SHADER_BIT, program);
+	glUseProgramStages( name, stages, program);
 
 	/*
 	 * if everything worked

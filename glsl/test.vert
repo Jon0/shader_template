@@ -1,6 +1,6 @@
 #version 430
 
-layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 0) in vec4 vertexPosition_modelspace;
 
 layout(std430, binding = 1) buffer Camera {
 	mat4 P;
@@ -17,5 +17,5 @@ out gl_PerVertex {
 void main(){
 
 	// cam.M * cam.V * cam.P *
-	gl_Position = vec4( vertexPosition_modelspace, 1 );
+	gl_Position = P * vertexPosition_modelspace;
 }

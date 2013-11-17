@@ -16,15 +16,15 @@
 namespace std {
 
 Camera::Camera():
-		focus {0, 30, 0},
+		focus {0, 0, 0},
 		cam_angle {0.644164, 0.194619, 0.718575, 0.175646},
 		cam_angle_d {1, 0, 0, 0},
 		click_old {1, 0, 0, 0},
 		click_new {1, 0, 0, 0},
-		camera_properties { GL_SHADER_STORAGE_BLOCK }
+		camera_properties { GL_SHADER_STORAGE_BUFFER }
 {
 	cam_aspect = 1.0;
-	viewzoom = 697.38;
+	viewzoom = 1.0;
 
 	// mouse action settings
 	arcball_x = arcball_y = 0.0;
@@ -45,9 +45,9 @@ void Camera::update( float tick ) {
 	glm::vec3 eye(x, y, z - viewzoom);
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-	camera_properties.data.P = glm::perspective(60.0f, cam_aspect, 1.0f, 5000.0f);
-	camera_properties.data.V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
-	camera_properties.data.M = glm::mat4(1.0);
+	camera_properties.data->P = glm::perspective(60.0f, cam_aspect, 1.0f, 100.0f);
+	camera_properties.data->V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
+	camera_properties.data->M = glm::mat4(1.0);
 	camera_properties.update();
 }
 
@@ -118,7 +118,7 @@ glm::quat Camera::cameraAngle() {
 }
 
 glm::vec3 Camera::project(const glm::vec3 &v) {
-	return glm::project( v, camera_properties.data.V, camera_properties.data.P, glm::vec4(0, 0, windowwidth, windowheight) );
+	return glm::project( v, camera_properties.data->V, camera_properties.data->P, glm::vec4(0, 0, windowwidth, windowheight) );
 }
 
 glm::vec3 Camera::unProject(int x, int y) {
@@ -127,11 +127,11 @@ glm::vec3 Camera::unProject(int x, int y) {
 }
 
 glm::mat4 Camera::viewMatrix() {
-	return camera_properties.data.V;
+	return camera_properties.data->V;
 }
 
 glm::mat4 Camera::projectionMatrix() {
-	return camera_properties.data.P;
+	return camera_properties.data->P;
 }
 
 Buffer<CameraProperties> *Camera::properties() {
