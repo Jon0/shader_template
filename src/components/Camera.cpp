@@ -45,7 +45,7 @@ void Camera::update( float tick ) {
 	glm::vec3 eye(x, y, z - viewzoom);
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-	camera_properties.data->P = glm::perspective(60.0f, cam_aspect, 1.0f, 100.0f);
+	camera_properties.data->P = glm::mat4(1.0); //glm::perspective(60.0f, cam_aspect, 1.0f, 100.0f);
 	camera_properties.data->V = glm::lookAt(focus, eye, up) * glm::mat4_cast(cam_angle) * glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) );
 	camera_properties.data->M = glm::mat4(1.0);
 	camera_properties.update();

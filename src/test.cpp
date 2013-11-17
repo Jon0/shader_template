@@ -65,18 +65,18 @@ int main(int argc, char *argv[]) {
     // Test Vertex Data
     vector<silly_vect> verts;
     silly_vect a;
-    a.pos.x = -50;
-    a.pos.y = 50;
+    a.pos.x = -0.50;
+    a.pos.y = 0.50;
     a.pos.w = 1.0;
 
     silly_vect b;
-    b.pos.x = 50;
-    b.pos.y = -50;
+    b.pos.x = 0.50;
+    b.pos.y = -0.50;
     b.pos.w = 1.0;
 
     silly_vect c;
-    c.pos.x = -50;
-    c.pos.y = -50;
+    c.pos.x = -0.50;
+    c.pos.y = -0.50;
     c.pos.w = 1.0;
 
     verts.push_back(a);
