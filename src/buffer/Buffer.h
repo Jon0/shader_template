@@ -47,9 +47,8 @@ public:
 		glBindBuffer(type, 0);
 	}
 
-	Buffer(GLenum t, vector<T> array): Buffer(t,
-			array.data(),
-			[array]() -> GLsizeiptr { return array.size(); }) {}
+	Buffer(GLenum t, vector<T> array):
+			Buffer(t, array.data(), [array]() -> GLsizeiptr { return array.size(); }) {}
 
 	virtual ~Buffer() {
 		glDeleteBuffers(1, &location);

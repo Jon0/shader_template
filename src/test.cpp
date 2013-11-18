@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 
 #include "buffer/Buffer.h"
+#include "buffer/Octree.h"
 #include "components/Camera.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
@@ -49,12 +50,18 @@ int main(int argc, char *argv[]) {
 	glBindVertexArray(vao);
 
     // Init Pipeline
-    Shader vert("glsl/test.vert", GL_VERTEX_SHADER);
-    Shader frag("glsl/test.frag", GL_FRAGMENT_SHADER);
+    Shader test_vert("glsl/test.vert", GL_VERTEX_SHADER);
+    Shader test_frag("glsl/test.frag", GL_FRAGMENT_SHADER);
+    Shader voxel_vert("glsl/voxel.vert", GL_VERTEX_SHADER);
+    Shader voxel_frag("glsl/voxel.frag", GL_FRAGMENT_SHADER);
+
+    Pipeline voxel_pipeline;
+    voxel_pipeline.addStage(voxel_vert, GL_VERTEX_SHADER_BIT);
+    voxel_pipeline.addStage(voxel_frag, GL_FRAGMENT_SHADER_BIT);
 
     Pipeline pipeline;
-    pipeline.addStage(vert, GL_VERTEX_SHADER_BIT);
-    pipeline.addStage(frag, GL_FRAGMENT_SHADER_BIT);
+    pipeline.addStage(test_vert, GL_VERTEX_SHADER_BIT);
+    pipeline.addStage(test_frag, GL_FRAGMENT_SHADER_BIT);
 
     // Test Vertex Data
     vector<silly_vect> verts;
@@ -80,6 +87,11 @@ int main(int argc, char *argv[]) {
     verts.push_back(b);
     verts.push_back(c);
     Buffer<silly_vect> buff(GL_ARRAY_BUFFER, verts); //.data(), [verts]() -> GLsizeiptr { return verts.size(); }
+
+    /*
+     * 3d buffer of voxels
+     */
+    Octree tree(128);
 
 
     /*
@@ -139,8 +151,11 @@ int main(int argc, char *argv[]) {
 	    /*
 	     * attach pipeline
 	     */
-		glBindProgramPipeline(pipeline.name);
+		glBindProgramPipeline(voxel_pipeline.name);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindProgramPipeline(pipeline.name);
+		glDrawArrays(GL_POINTS, 0, 3);
 
 		glFlush();
 		glfwSwapBuffers(window);
