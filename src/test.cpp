@@ -149,11 +149,14 @@ int main(int argc, char *argv[]) {
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0*4));
 
 	    /*
-	     * attach pipeline
+	     * attach voxel pipeline to produce voxel data
 	     */
 		glBindProgramPipeline(voxel_pipeline.name);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
+		/*
+		 * draw voxels
+		 */
 		glBindProgramPipeline(pipeline.name);
 		glDrawArrays(GL_POINTS, 0, 3);
 
