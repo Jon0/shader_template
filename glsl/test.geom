@@ -2,6 +2,8 @@
 layout (points) in;
 layout (triangle_strip,max_vertices=24) out;
 
+layout(binding = 0, rgba8) coherent uniform image3D voxel;
+
 smooth out vec4 oColor;
 in VertexData
 {
@@ -40,7 +42,14 @@ const int  cubeIndices[24]  = int [24]
 void main()
 {
     vec4 temp;
-    int a = int(vertexData[0].colour[3]);
+
+    // find voxel color
+    vec4 a = imageLoad(voxel, ivec3(1,1,1));
+
+    if (a.w == 0) {
+    	return;
+    }
+
     //btm face
     if (a>31)
     {
@@ -58,7 +67,7 @@ void main()
         a = a - 32;
         EndPrimitive();
     }
-    //top face
-    if (a >15 )
-...
+
+    //top face...
+
 }
