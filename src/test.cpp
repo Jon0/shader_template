@@ -7,16 +7,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 #include "buffer/Buffer.h"
 #include "buffer/Octree.h"
 #include "components/Camera.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
-#include "config.h"
 
 using namespace std;
 
@@ -25,76 +21,22 @@ struct silly_vect {
 	glm::vec4 norm;
 };
 
-Buffer<silly_vect> make_buffer(const char *filename) {
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(filename,
-			aiProcess_CalcTangentSpace | aiProcess_Triangulate
-			| aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
-
-	cout << filename << " contains " << scene->mNumMeshes << " meshes" << endl;
-	cout << filename << " contains " << scene->mNumMaterials << " materials" << endl;
-
-	vector<silly_vect> verts;
-
-	/* add each polygon */
-	for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {
-
-		/*
-		 * copy data to the mesh
-		 */
-		aiMesh &mesh = *scene->mMeshes[m];
-		cout << "num faces = " << mesh.mNumFaces << endl;
-		cout << "has tangents = " << mesh.HasTangentsAndBitangents() << endl;
-
-		for (unsigned int i = 0; i < mesh.mNumFaces; ++i) {
-
-			for (unsigned int j = 0; j < mesh.mFaces[i].mNumIndices; ++j) {
-				unsigned int ind = mesh.mFaces[i].mIndices[j];
-
-				// copy vector data
-			    silly_vect vect;
-			    vect.pos.x = mesh.mVertices[ind].x;
-			    vect.pos.y = mesh.mVertices[ind].y;
-			    vect.pos.z = mesh.mVertices[ind].z;
-			    vect.pos.w = 1.0;
-			    verts.push_back(vect);
-
-
-				/* tex coord if available */
-				if (mesh.mNumUVComponents[0]) {
-					aiVector3D &c = mesh.mTextureCoords[0][ind];
-
-				}
-
-				/* tangent and bitangent if available */
-				if (mesh.HasTangentsAndBitangents()) {
-
-				}
-			}
-		}
-	}
-
-	cout << "finish load" << endl;
-	return Buffer<silly_vect>(GL_ARRAY_BUFFER, verts);
-}
-
 void error_callback(int error, const char* description) {
 	cerr << description << endl;
 }
 
-void printVersion() {
-	cout << "shader_test version: " << Test_VERSION_MAJOR << "." << Test_VERSION_MINOR << endl;
-}
-
 int main(int argc, char *argv[]) {
+	/*
+	 * initialise glfw window first
+	 */
 	if (!glfwInit()) exit(EXIT_FAILURE);
-
 	glfwSetErrorCallback(error_callback);
-
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Window", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	// Initialize GLEW
+	/*
+	 * initialize glew after
+	 */
     if (glewInit() != GLEW_OK) {
     	cerr << "Failed to initialize GLEW" << endl;
         exit(EXIT_FAILURE);
@@ -119,7 +61,7 @@ int main(int argc, char *argv[]) {
     pipeline.addStage(test_vert, GL_VERTEX_SHADER_BIT);
     pipeline.addStage(test_frag, GL_FRAGMENT_SHADER_BIT);
 
-    // Test Vertex Data
+    // Random Vertex Data
     vector<silly_vect> verts;
     silly_vect a;
     a.pos.x = -8;
@@ -142,15 +84,7 @@ int main(int argc, char *argv[]) {
     verts.push_back(a);
     verts.push_back(b);
     verts.push_back(c);
-    //Buffer<silly_vect> buff(GL_ARRAY_BUFFER, verts); //.data(), [verts]() -> GLsizeiptr { return verts.size(); }
-
-    // random model.
-    Buffer<silly_vect> buff = make_buffer("model/Teapot.obj");
-
-    /*
-     * 3d buffer of voxels
-     */
-    Octree tree(128);
+    Buffer<silly_vect> buff(GL_ARRAY_BUFFER, verts);
 
     /*
      * camera viewpoint
@@ -174,7 +108,6 @@ int main(int argc, char *argv[]) {
 	    int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
-
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
