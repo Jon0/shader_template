@@ -12,6 +12,7 @@
 namespace std {
 
 Pipeline::Pipeline() {
+	bindings = 1;
 	glGenProgramPipelines(1, &name);
 	//glUseProgramStages
 }
@@ -21,6 +22,7 @@ Pipeline::~Pipeline() {
 }
 
 void Pipeline::addStage(Shader &s, GLbitfield stages) {
+	cout << "adding shader " << s.name << endl;
 
 	/*
 	 * create a program stage
@@ -40,11 +42,21 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 	char attname [32];
 	for (int i = 0; i < num_blocks; ++i) {
 		glGetProgramResourceName(program, GL_SHADER_STORAGE_BLOCK, i, 32, &len, attname );
-		cout << "attribute: " << attname << endl;
-
 		GLuint block_index = glGetProgramResourceIndex( program, GL_SHADER_STORAGE_BLOCK, attname );
 
-		glShaderStorageBlockBinding( program, block_index, 1 ); // bind to 1.
+		// set binding point for attribute
+		uint bind_point;
+
+		// check if the name is already mapped
+		if(binds.find(attname) == binds.end()) {
+			bind_point = bindings++;
+			glShaderStorageBlockBinding( program, block_index, bind_point ); // bind to next value
+			binds[attname] = bind_point;
+		}
+		else {
+			bind_point = binds[attname];
+		}
+		cout << " -- attribute: " << attname << " bound to " << bind_point << endl;
 	}
 
 	/*
@@ -71,6 +83,10 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 	 * if everything worked
 	 */
 	stage.push_back( program );
+}
+
+uint Pipeline::get(string s) {
+	return binds[s];
 }
 
 } /* namespace std */

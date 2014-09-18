@@ -16,6 +16,7 @@
 namespace std {
 
 Shader::Shader(string filename, GLenum shader_type) {
+	name = filename;
 	type = shader_type;
 
 	// load the fragment shader.

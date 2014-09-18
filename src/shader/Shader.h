@@ -17,6 +17,7 @@ namespace std {
 
 class Shader {
 public:
+	string name;
 	GLuint ShaderHandle;
 	GLenum type;
 

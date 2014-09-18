@@ -9,14 +9,13 @@
 #include <glm/glm.hpp>
 
 #include "buffer/Buffer.h"
-#include "buffer/Octree.h"
 #include "components/Camera.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
 
 using namespace std;
 
-struct silly_vect {
+struct VertexData {
 	glm::vec4 pos;
 	glm::vec4 norm;
 };
@@ -50,32 +49,25 @@ int main(int argc, char *argv[]) {
     // Init Pipeline
     Shader test_vert("glsl/test.vert", GL_VERTEX_SHADER);
     Shader test_frag("glsl/test.frag", GL_FRAGMENT_SHADER);
-    Shader voxel_vert("glsl/voxel.vert", GL_VERTEX_SHADER);
-    Shader voxel_frag("glsl/voxel.frag", GL_FRAGMENT_SHADER);
-
-    Pipeline voxel_pipeline;
-    voxel_pipeline.addStage(voxel_vert, GL_VERTEX_SHADER_BIT);
-    voxel_pipeline.addStage(voxel_frag, GL_FRAGMENT_SHADER_BIT);
-
     Pipeline pipeline;
     pipeline.addStage(test_vert, GL_VERTEX_SHADER_BIT);
     pipeline.addStage(test_frag, GL_FRAGMENT_SHADER_BIT);
 
     // Random Vertex Data
-    vector<silly_vect> verts;
-    silly_vect a;
+    vector<VertexData> verts;
+    VertexData a;
     a.pos.x = -8;
     a.pos.y = 8;
     a.pos.z = -8;
     a.pos.w = 1.0;
 
-    silly_vect b;
+    VertexData b;
     b.pos.x = 5;
     b.pos.y = -5;
     b.pos.z = -8;
     b.pos.w = 1.0;
 
-    silly_vect c;
+    VertexData c;
     c.pos.x = -5;
     c.pos.y = -5;
     c.pos.z = -8;
@@ -84,14 +76,13 @@ int main(int argc, char *argv[]) {
     verts.push_back(a);
     verts.push_back(b);
     verts.push_back(c);
-    Buffer<silly_vect> buff(GL_ARRAY_BUFFER, verts);
+    Buffer<VertexData> buff(GL_ARRAY_BUFFER, verts);
 
     /*
-     * camera viewpoint
+     * camera viewpoint object
      */
     Camera camera;
     camera.resize(800, 600);
-    camera.properties()->bind(1);
 
     /*
      * gl error check
@@ -127,26 +118,23 @@ int main(int argc, char *argv[]) {
 		}
 
 		/*
-		 * update cam
+		 * update camera and bind
 		 */
 		camera.update(0.01);
-		camera.properties()->bind(1);
+		camera.properties()->bind(pipeline.get("Camera"));
+
+
 
 		/*
 		 * attach buffers
 		 */
 		glBindBuffer( GL_ARRAY_BUFFER, buff.location );
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0*4));
-
-	    /*
-	     * attach voxel pipeline to produce voxel data
-	     */
-		glBindProgramPipeline(voxel_pipeline.name);
-		glDrawArrays(GL_TRIANGLES, 0, 6400);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void *)(0*sizeof(glm::vec4)));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void *)(1*sizeof(glm::vec4)));
 
 		/*
-		 * draw voxels
+		 * draw test
 		 */
 		glBindProgramPipeline(pipeline.name);
 		glDrawArrays(GL_TRIANGLES, 0, 6400*3);

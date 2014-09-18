@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec4 vertexPosition_modelspace;
 
-layout(std430, binding = 1) buffer Camera {
+layout(std430) buffer Camera {
 	mat4 P;
 	mat4 V;
 	mat4 M;

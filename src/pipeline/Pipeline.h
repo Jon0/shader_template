@@ -8,6 +8,7 @@
 #ifndef PIPELINE_H_
 #define PIPELINE_H_
 
+#include <map>
 #include <vector>
 
 #include <GL/glew.h>
@@ -26,6 +27,13 @@ public:
 	virtual ~Pipeline();
 
 	void addStage(Shader &, GLbitfield);
+
+	uint get(string);
+
+private:
+	uint bindings;
+	map<string, uint> binds;
+
 };
 
 } /* namespace std */
