@@ -10,6 +10,7 @@
 
 #include "buffer/Buffer.h"
 #include "components/Camera.h"
+#include "control/Arcball.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
 
@@ -25,12 +26,15 @@ void error_callback(int error, const char* description) {
 }
 
 int main(int argc, char *argv[]) {
+	int windowWidth = 800, windowHeight = 600;
+
+
 	/*
 	 * initialise glfw window first
 	 */
 	if (!glfwInit()) exit(EXIT_FAILURE);
 	glfwSetErrorCallback(error_callback);
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Window", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
 	/*
@@ -82,7 +86,9 @@ int main(int argc, char *argv[]) {
      * camera viewpoint object
      */
     Camera camera;
-    camera.resize(800, 600);
+    camera.resize(windowWidth, windowHeight);
+
+    Arcball arcball(windowWidth, windowHeight);
 
     /*
      * gl error check
@@ -102,18 +108,16 @@ int main(int argc, char *argv[]) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
+			double oldx = mousex;
+			double oldy = mousey;
 			glfwGetCursorPos(window, &mousex, &mousey);
-
-			if (!mDown) {
-				camera.mouseClicked(0, 0, mousex, height-mousey);
-			}
-			else {
-				camera.mouseDragged(mousex, height-mousey);
+			if (mDown) {
+				glm::quat q = arcball.mouseDragged(oldx, oldy, mousex, mousey);
+				camera.rotate(q);
 			}
 			mDown = true;
 		}
-		else if (mDown) {
-			camera.mouseClicked(0, 1, mousex, height-mousey);
+		else {
 			mDown = false;
 		}
 
@@ -126,10 +130,12 @@ int main(int argc, char *argv[]) {
 
 
 		/*
-		 * attach buffers
+		 * attach buffers and give 2 attribute pointers
+		 *
 		 */
 		glBindBuffer( GL_ARRAY_BUFFER, buff.location );
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void *)(0*sizeof(glm::vec4)));
 		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), (void *)(1*sizeof(glm::vec4)));
 
@@ -141,7 +147,7 @@ int main(int argc, char *argv[]) {
 
 		glFlush();
 		glfwSwapBuffers(window);
-		glfwWaitEvents();
+		glfwPollEvents();
 	}
 
 	glfwDestroyWindow(window);

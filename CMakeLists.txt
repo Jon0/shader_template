@@ -22,6 +22,7 @@ file(GLOB SRC_FILES
     "src/*.cpp"
     "src/buffer/*.cpp"
     "src/components/*.cpp"
+    "src/control/*.cpp"
     "src/shader/*.cpp"
     "src/pipeline/*.cpp"
 )
