@@ -25,6 +25,39 @@ void error_callback(int error, const char* description) {
 	cerr << description << endl;
 }
 
+void checkGLError() {
+	int error = glGetError();
+	string estr;
+	switch (error) {
+	case GL_NO_ERROR:
+		estr = "GL_NO_ERROR";
+		break;
+	case GL_INVALID_ENUM:
+		estr = "GL_INVALID_ENUM";
+		break;
+	case GL_INVALID_VALUE:
+		estr = "GL_INVALID_VALUE";
+		break;
+	case GL_INVALID_OPERATION:
+		estr = "GL_INVALID_OPERATION";
+		break;
+	case GL_INVALID_FRAMEBUFFER_OPERATION:
+		estr = "GL_INVALID_FRAMEBUFFER_OPERATION";
+		break;
+	case GL_OUT_OF_MEMORY:
+		estr = "GL_OUT_OF_MEMORY";
+		break;
+	case GL_STACK_UNDERFLOW:
+		estr = "GL_STACK_UNDERFLOW";
+		break;
+	case GL_STACK_OVERFLOW:
+		estr = "GL_STACK_OVERFLOW";
+		break;
+	}
+    if (error) cout << "error = " << estr << endl;
+
+}
+
 int main(int argc, char *argv[]) {
 	int windowWidth = 800, windowHeight = 600;
 
@@ -90,10 +123,7 @@ int main(int argc, char *argv[]) {
 
     Arcball arcball(windowWidth, windowHeight);
 
-    /*
-     * gl error check
-     */
-    if (int error = glGetError()) cout << "error = " << error << endl;
+
 
     /*
      * start loop
@@ -147,6 +177,9 @@ int main(int argc, char *argv[]) {
 
 		glFlush();
 		glfwSwapBuffers(window);
+
+
+		checkGLError();
 		glfwPollEvents();
 	}
 
