@@ -56,7 +56,22 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 		else {
 			bind_point = binds[attname];
 		}
-		cout << " -- attribute: " << attname << " bound to " << bind_point << endl;
+		cout << " -- storage block: " << attname << " bound to " << bind_point << endl;
+	}
+
+	/*
+	 * list uniforms in shader
+	 */
+	glGetProgramInterfaceiv(program, GL_UNIFORM, GL_ACTIVE_RESOURCES, &num_blocks);
+	for (int i = 0; i < num_blocks; ++i) {
+		glGetProgramResourceName(program, GL_UNIFORM, i, 32, &len, attname );
+		GLuint uniform_index = glGetUniformLocation( program, attname );
+
+		// check if the name is already mapped
+		if(binds.find(attname) == binds.end()) {
+			binds[attname] = uniform_index;
+		}
+		cout << " -- uniform: " << attname << " bound to " << uniform_index << endl;
 	}
 
 	/*
@@ -71,7 +86,6 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 		glGetProgramInfoLog( program, 10239, &length, log );
 		fprintf(stderr, "Linker log:\n%s\n", log);
 	}
-
 
 	/*
 	 * add stage to pipeline
