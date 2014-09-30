@@ -26,8 +26,19 @@ public:
 	Pipeline();
 	virtual ~Pipeline();
 
-	void addStage(Shader &, GLbitfield);
+	/*
+	 * set the shader to draw with
+	 */
+	void setStage(GLuint, GLbitfield);
 
+	/*
+	 * create a new program for use with this pipeline
+	 */
+	GLuint makeProgram(Shader &);
+
+	/*
+	 * return bind point by name of shader variable
+	 */
 	uint get(string);
 
 private:

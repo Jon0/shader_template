@@ -52,12 +52,8 @@ public:
 	void rotate(glm::quat);
 	void translate(glm::vec3);
 
-	void keyPressed(unsigned char c);
-
-
 	glm::quat cameraAngle();
 	glm::vec3 project(const glm::vec3 &);
-	glm::vec3 unProject(int, int);
 	glm::mat4 viewMatrix();
 	glm::mat4 projectionMatrix();
 	Buffer<CameraProperties> *properties();

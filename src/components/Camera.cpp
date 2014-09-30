@@ -21,11 +21,12 @@ Camera::Camera():
 		cam_angle_d {1, 0, 0, 0},
 		camera_properties { GL_SHADER_STORAGE_BUFFER }
 {
-	cam_aspect = 1.0;
+	/*
+	 * an initial camera pose
+	 */
 	viewzoom = 40.0;
+	cam_aspect = 1.0;
 	windowwidth = windowheight = 1;
-
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
 
 Camera::~Camera() {}
@@ -34,7 +35,10 @@ void Camera::update( float tick ) {
 	cam_angle = cam_angle_d * cam_angle;
 	cam_angle_d = glm::slerp( glm::quat(), cam_angle_d, ( 1 - tick * 10 ) );
 
-	//float x = focus.x, y = focus.y, z = focus.z;
+
+	/*
+	 * set struct and pass to shader
+	 */
 	camera_properties.data->P = glm::perspective(45.0f, cam_aspect, 1.0f, 1000.0f);
 	camera_properties.data->V = glm::translate( glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -viewzoom) ) * glm::mat4_cast(cam_angle);
 	camera_properties.data->M = glm::mat4(1.0f);
@@ -42,6 +46,9 @@ void Camera::update( float tick ) {
 }
 
 void Camera::resize(int x, int y) {
+	/*
+	 * size of output window
+	 */
 	windowwidth = x;
 	windowheight = y;
 	cam_aspect = (double) x / (double) y;
@@ -70,12 +77,6 @@ glm::quat Camera::cameraAngle() {
 
 glm::vec3 Camera::project(const glm::vec3 &v) {
 	return glm::project( v, camera_properties.data->V, camera_properties.data->P, glm::vec4(0, 0, windowwidth, windowheight) );
-}
-
-glm::vec3 Camera::unProject(int x, int y) {
-	GLdouble point[3];
-	// TODO
-	return glm::vec3(point[0], point[1], point[2]);
 }
 
 glm::mat4 Camera::viewMatrix() {

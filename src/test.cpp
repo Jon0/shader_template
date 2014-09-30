@@ -13,18 +13,20 @@
 #include "control/Arcball.h"
 #include "pipeline/Pipeline.h"
 #include "shader/Shader.h"
+#include "vertex.h"
 
 using namespace std;
 
-struct VertexData {
-	glm::vec4 pos;
-	glm::vec4 norm;
-};
-
+/*
+ * glfw error handling
+ */
 void error_callback(int error, const char* description) {
 	cerr << description << endl;
 }
 
+/*
+ * output gl error on cout
+ */
 void checkGLError() {
 	int error = glGetError();
 	string estr;
@@ -61,7 +63,6 @@ void checkGLError() {
 int main(int argc, char *argv[]) {
 	int windowWidth = 800, windowHeight = 600;
 
-
 	/*
 	 * initialise glfw window first
 	 */
@@ -78,38 +79,31 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-	/* Init vao */
+	/*
+	 * Init vao for rendering
+	 */
     GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-    // Init Pipeline
+    /*
+     * Load shaders and initialise pipeline
+     */
     Shader test_vert("glsl/test.vert", GL_VERTEX_SHADER);
     Shader test_frag("glsl/test.frag", GL_FRAGMENT_SHADER);
     Pipeline pipeline;
-    pipeline.addStage(test_vert, GL_VERTEX_SHADER_BIT);
-    pipeline.addStage(test_frag, GL_FRAGMENT_SHADER_BIT);
+    GLuint vshader = pipeline.makeProgram(test_vert);
+    GLuint fshader = pipeline.makeProgram(test_frag);
+    pipeline.setStage(vshader, GL_VERTEX_SHADER_BIT);
+    pipeline.setStage(fshader, GL_FRAGMENT_SHADER_BIT);
 
-    // Random Vertex Data
+    /*
+     * Create random Triangle verticies and store in buffer
+     */
     vector<VertexData> verts;
-    VertexData a;
-    a.pos.x = -8;
-    a.pos.y = 8;
-    a.pos.z = -8;
-    a.pos.w = 1.0;
-
-    VertexData b;
-    b.pos.x = 5;
-    b.pos.y = -5;
-    b.pos.z = -8;
-    b.pos.w = 1.0;
-
-    VertexData c;
-    c.pos.x = -5;
-    c.pos.y = -5;
-    c.pos.z = -8;
-    c.pos.w = 1.0;
-
+    VertexData a = makeVert(glm::vec4(-8, 8, -8, 1));
+    VertexData b = makeVert(glm::vec4(5, -5, -8, 1));
+    VertexData c = makeVert(glm::vec4(-5, -5, -8, 1));
     verts.push_back(a);
     verts.push_back(b);
     verts.push_back(c);
@@ -121,22 +115,30 @@ int main(int argc, char *argv[]) {
     Camera camera;
     camera.resize(windowWidth, windowHeight);
 
+    /*
+     * arcball mouse control
+     */
     Arcball arcball(windowWidth, windowHeight);
 
-
-
     /*
-     * start loop
+     * start main loop
      */
     bool mDown = false;
     double mousex, mousey;
 	while (!glfwWindowShouldClose(window))
 	{
+
+		/*
+		 * find the current dimensions of the window
+		 */
 	    int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		/*
+		 * check for any mouse events
+		 */
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) {
 			double oldx = mousex;
 			double oldy = mousey;
@@ -158,7 +160,6 @@ int main(int argc, char *argv[]) {
 		camera.properties()->bind(pipeline.get("Camera"));
 
 
-
 		/*
 		 * attach buffers and give 2 attribute pointers
 		 *
@@ -173,16 +174,18 @@ int main(int argc, char *argv[]) {
 		 * draw test
 		 */
 		glBindProgramPipeline(pipeline.name);
-		glDrawArrays(GL_TRIANGLES, 0, 6400*3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glFlush();
 		glfwSwapBuffers(window);
-
 
 		checkGLError();
 		glfwPollEvents();
 	}
 
+	/*
+	 * clean up
+	 */
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);

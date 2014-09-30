@@ -14,14 +14,22 @@ namespace std {
 Pipeline::Pipeline() {
 	bindings = 1;
 	glGenProgramPipelines(1, &name);
-	//glUseProgramStages
 }
 
 Pipeline::~Pipeline() {
 	glDeleteProgramPipelines(1, &name);
 }
 
-void Pipeline::addStage(Shader &s, GLbitfield stages) {
+void Pipeline::setStage(GLuint program, GLbitfield stages) {
+
+	/*
+	 * add stage to pipeline
+	 */
+	glBindProgramPipeline(name);
+	glUseProgramStages( name, stages, program);
+}
+
+GLuint Pipeline::makeProgram(Shader &s) {
 	cout << "adding shader " << s.name << endl;
 
 	/*
@@ -49,13 +57,16 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 
 		// check if the name is already mapped
 		if(binds.find(attname) == binds.end()) {
+			// bind to next value
 			bind_point = bindings++;
-			glShaderStorageBlockBinding( program, block_index, bind_point ); // bind to next value
 			binds[attname] = bind_point;
 		}
 		else {
 			bind_point = binds[attname];
 		}
+
+		// set the binding
+		glShaderStorageBlockBinding( program, block_index, bind_point );
 		cout << " -- storage block: " << attname << " bound to " << bind_point << endl;
 	}
 
@@ -88,15 +99,10 @@ void Pipeline::addStage(Shader &s, GLbitfield stages) {
 	}
 
 	/*
-	 * add stage to pipeline
-	 */
-	glBindProgramPipeline(name);
-	glUseProgramStages( name, stages, program);
-
-	/*
 	 * if everything worked
 	 */
 	stage.push_back( program );
+	return program;
 }
 
 uint Pipeline::get(string s) {
