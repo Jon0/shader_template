@@ -25,9 +25,6 @@ struct CameraProperties {
 	glm::mat4 M;
 };
 
-void getArc(int, int, int, int, float, glm::quat &);
-void getUnitCircle(int, int, int, int, glm::quat &);
-
 class Camera {
 private:
 	/*
