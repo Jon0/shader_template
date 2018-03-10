@@ -11,7 +11,9 @@
 #include <map>
 #include <vector>
 
-#include <GL/glew.h>
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
+
 #include <GLFW/glfw3.h>
 
 #include "../shader/Shader.h"

@@ -4,7 +4,9 @@
 #include <math.h>
 #include <vector>
 
-#include <GL/glew.h>
+
+#include <epoxy/gl.h>
+#include <epoxy/glx.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
@@ -67,17 +69,15 @@ int main(int argc, char *argv[]) {
 	 * initialise glfw window first
 	 */
 	if (!glfwInit()) exit(EXIT_FAILURE);
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	glfwSetErrorCallback(error_callback);
 	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
 	glfwMakeContextCurrent(window);
 
-	/*
-	 * initialize glew after
-	 */
-    if (glewInit() != GLEW_OK) {
-    	cerr << "Failed to initialize GLEW" << endl;
-        exit(EXIT_FAILURE);
-    }
 
 	/*
 	 * Init vao for rendering

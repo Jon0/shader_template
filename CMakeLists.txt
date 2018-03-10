@@ -1,21 +1,17 @@
 project (GLTemplate)
 
 cmake_minimum_required (VERSION 2.8)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/")
 
-set(GLEW_SOURCE "${PROJECT_SOURCE_DIR}/library/glew-1.10.0/src/glew.c")
-add_subdirectory (library/glfw-3.0.3)
-add_subdirectory (library/glm)
+find_package(LibEpoxy 1.2 REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
+pkg_search_module(GLM REQUIRED glm)
 
-include_directories ( ${GLEW_INCLUDE_DIR} )
-include_directories ( ${GLFW_INCLUDE_DIR} )
-include_directories ( ${GLM_INCLUDE_DIR} )
-
-include_directories ("${PROJECT_SOURCE_DIR}/library")
-include_directories ("${PROJECT_SOURCE_DIR}/library/glew-1.10.0/include")
-include_directories ("${PROJECT_SOURCE_DIR}/library/glfw-3.0.3/include")
-
-add_library( glew STATIC
-	${GLEW_SOURCE}
+include_directories (
+	${LIBEPOXY_INCLUDE_DIRS}
+	${GLFW_INCLUDE_DIRS}
+	${GLM_INCLUDE_DIRS}
 )
 
 file(GLOB SRC_FILES
@@ -31,6 +27,11 @@ file(GLOB SRC_FILES
 # copy shaders to binary folder
 file( COPY "${PROJECT_SOURCE_DIR}/glsl/" DESTINATION "${PROJECT_BINARY_DIR}/glsl/")
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++17)
 add_executable (GLMain ${SRC_FILES})
-target_link_libraries (GLMain glew glfw ${GLFW_LIBRARIES})
+target_link_libraries (
+	GLMain 
+	${LIBEPOXY_LIBRARIES} 
+	${GLFW_LIBRARIES}
+	${GLM_LIBRARIES}
+)
